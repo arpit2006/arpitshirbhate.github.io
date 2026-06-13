@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, GitBranch, ExternalLink } from 'lucide-react';
+import { Trophy, GitBranch, ExternalLink, FolderGit2, Flame, Code2, GitCommit } from 'lucide-react';
 
 const GithubIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -10,6 +10,19 @@ const GithubIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 );
 
 export const CodingMetrics: React.FC = () => {
+  const [repoCount, setRepoCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('https://api.github.com/users/arpit2006')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && typeof data.public_repos === 'number') {
+          setRepoCount(data.public_repos);
+        }
+      })
+      .catch((err) => console.error('Error fetching GitHub profile:', err));
+  }, []);
+
   return (
     <section id="metrics" className="py-24 relative bg-zinc-950/40">
       <div className="max-w-5xl mx-auto px-6 relative z-10">
@@ -26,6 +39,103 @@ export const CodingMetrics: React.FC = () => {
           <p className="text-zinc-400 mt-4 max-w-xl text-sm sm:text-base leading-relaxed">
             Direct output indicators from continuous skill evaluation, platform commits, and competitive coding practice.
           </p>
+        </div>
+
+        {/* Stats Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          {/* Card 1: Total Repositories */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="p-5 rounded-2xl border border-zinc-900 bg-zinc-900/10 hover:bg-zinc-900/20 hover:border-emerald-500/10 hover:shadow-emerald-500/5 transition-all duration-300 group flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Total Repositories</span>
+              <FolderGit2 className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+            </div>
+            <div>
+              <span className="text-3xl font-extrabold text-white font-display">
+                {repoCount !== null ? repoCount : '25+'}
+              </span>
+              <p className="text-[9px] text-zinc-500 font-mono mt-1">Fetched live via GitHub API</p>
+            </div>
+          </motion.div>
+
+          {/* Card 2: Contributions */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="p-5 rounded-2xl border border-zinc-900 bg-zinc-900/10 hover:bg-zinc-900/20 hover:border-emerald-500/10 hover:shadow-emerald-500/5 transition-all duration-300 group flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Contributions</span>
+              <GitCommit className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+            </div>
+            <div>
+              <span className="text-3xl font-extrabold text-white font-display">
+                680+
+              </span>
+              <p className="text-[9px] text-zinc-500 font-mono mt-1">Commits, PRs & reviews</p>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Streak */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="p-5 rounded-2xl border border-zinc-900 bg-zinc-900/10 hover:bg-zinc-900/20 hover:border-emerald-500/10 hover:shadow-emerald-500/5 transition-all duration-300 group flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Commit Streak</span>
+              <Flame className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
+            </div>
+            <div>
+              <span className="text-3xl font-extrabold text-white font-display flex items-baseline gap-1">
+                18 <span className="text-xs text-zinc-500 font-mono font-normal">days</span>
+              </span>
+              <p className="text-[9px] text-zinc-500 font-mono mt-1">Max streak: 38 days</p>
+            </div>
+          </motion.div>
+
+          {/* Card 4: Languages */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className="p-5 rounded-2xl border border-zinc-900 bg-zinc-900/10 hover:bg-zinc-900/20 hover:border-emerald-500/10 hover:shadow-emerald-500/5 transition-all duration-300 group flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Core Languages</span>
+              <Code2 className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
+            </div>
+            <div className="space-y-2">
+              <div>
+                <div className="flex justify-between items-center text-[9px] font-mono mb-1">
+                  <span className="text-zinc-400">Python</span>
+                  <span className="text-zinc-500">45%</span>
+                </div>
+                <div className="w-full bg-zinc-950 h-1 rounded overflow-hidden">
+                  <div className="bg-emerald-400 h-full rounded" style={{ width: '45%' }}></div>
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between items-center text-[9px] font-mono mb-1">
+                  <span className="text-zinc-400">Java / TS</span>
+                  <span className="text-zinc-500">35%</span>
+                </div>
+                <div className="w-full bg-zinc-950 h-1 rounded overflow-hidden">
+                  <div className="bg-indigo-400 h-full rounded" style={{ width: '35%' }}></div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Live Contribution Calendar */}
